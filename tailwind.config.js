@@ -15,6 +15,11 @@ export default {
         'primary': '#21BF73',
         'dark': '#202020',
         'dark-cover': "#0C0C0C",
+      },
+      fill: {
+        'primary': '#21BF73',
+        'dark': '#202020',
+        'dark-cover': "#0C0C0C",
       }
     },
   },

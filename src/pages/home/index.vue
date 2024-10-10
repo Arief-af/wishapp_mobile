@@ -2,21 +2,42 @@
   <AppLayout>
     <section class="p-3">
       <div
-        class="bg-primary rounded-lg p-5 min-h-[200px] flex justify-center items-center"
+        class="relative bg-primary rounded-lg p-5 min-h-[200px] flex justify-center items-center"
       >
-        <div class="font-bold text-2xl text-dark-cover">
-            IDR 1,000,000
+        <section class="text-center">
+          <div class="text-dark">Your Balance</div>
+          <div class="font-bold text-2xl text-dark-cover">IDR 1,000,000</div>
+        </section>
+        <div
+          @click="$router.push('/login')"
+          class="bg-white right-6 top-6 w-12 h-12 rounded-full absolute flex justify-center items-center"
+        >
+          <box-icon class="fill-primary" name="exit"></box-icon>
         </div>
       </div>
     </section>
-    
-    <section class="mt-5 flex justify-center items-center  gap-5">
-        <div class="text-white bg-dark w-28 h-28 justify-center p-4 flex items-center">
-            Income
+
+    <section class="mt-5 flex justify-center items-center gap-5">
+      <div
+        class="text-white rounded-xl bg-dark w-28 h-28 justify-center p-4 flex items-center"
+      >
+        <div class="text-center">
+          <div class="block">
+            <box-icon class="fill-primary" name="line-chart"></box-icon>
+          </div>
+          <div class="text-white text-sm">Spend</div>
         </div>
-        <div class="text-white bg-dark w-28 h-28 justify-center p-4 flex items-center">
-            Spend
+      </div>
+      <div
+        class="text-white rounded-xl bg-dark w-28 h-28 justify-center p-4 flex items-center"
+      >
+        <div class="text-center">
+          <div class="block">
+            <box-icon class="fill-red-700" name="line-chart-down"></box-icon>
+          </div>
+          <div class="text-white text-sm">Spend</div>
         </div>
+      </div>
     </section>
 
     <section class="p-5">

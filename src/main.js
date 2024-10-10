@@ -3,6 +3,7 @@ import "./assets/css/app.css";
 import router from "./router";
 import App from "./App.vue";
 
+import 'boxicons'
 const app = createApp(App);
 app.use(router);
 import FormInput from "./components/form/Input.vue";
