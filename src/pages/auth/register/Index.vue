@@ -13,23 +13,23 @@ const onSubmit = () => {
     <AuthLayout title="Register Akun" back-path="/">
        <form @submit.prevent="onSubmit">
             <FormInput v-model="data.name" type="text" placeholder="Masukan nama anda" class="my-5">
-                <template #label>Nama</template>
+                <template #label>Nama*</template>
                 <template v-if="errors.name" #error>{{ errors.name[0] }}</template>
             </FormInput>
             <FormInput v-model="data.email" type="email" placeholder="Masukan email anda" class="my-5">
-                <template #label>Email</template>
+                <template #label>Email*</template>
                 <template v-if="errors.email" #error>{{ errors.email[0] }}</template>
             </FormInput>
             <FormInput v-model="data.phone_number" type="text" placeholder="Masukan nomor telp anda" class="my-5">
-                <template #label>No Telp</template>
+                <template #label>No Telp*</template>
                 <template v-if="errors.phone_number" #error>{{ errors.phone_number[0] }}</template>
             </FormInput>
             <FormInput v-model="data.password" type="password" placeholder="Masukan password anda" class="mt-5">
-                <template #label>Password</template>
+                <template #label>Password*</template>
                 <template v-if="errors.password" #error>{{ errors.password[0] }}</template>
             </FormInput>
             <FormInput v-model="data.password_confirmation" type="password" placeholder="Masukan password anda kembali" class="mt-5">
-                <template #label>Password Konfirmasi</template>
+                <template #label>Password Konfirmasi*</template>
                 <template v-if="errors.password_confirmation" #error>{{ errors.password_confirmation[0] }}</template>
             </FormInput>
             
