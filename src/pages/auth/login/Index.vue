@@ -20,7 +20,7 @@ const data = ref({})
                 </label>
                 <router-link to="/forgot-password" class="label-text text-primary">Forgot password?</router-link>
             </div>
-            <button type="submit" class="bg-primary outline-none border-0 text-dark  hover:bg-primary hover:text-dark w-full btn rounded-md">Login</button>
+            <button @click="$router.push('/home')" type="submit" class="bg-primary outline-none border-0 text-dark  hover:bg-primary hover:text-dark w-full btn rounded-md">Login</button>
             <div class="flex items-center justify-center my-5">
                 <router-link to="/register" class="label-text text-white">Belum punya akun? <span class="text-primary font-bold">Klik disini</span></router-link>
             </div>
