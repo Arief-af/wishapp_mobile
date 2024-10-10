@@ -9,7 +9,7 @@
         :placeholder="placeholder"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
-        class="bg-[#ECECEC] dark:bg-dark input w-full mt-3"
+        class="bg-dark input w-full mt-3"
       />
       <div class="text-sm text-red-500">
         <slot name="error"></slot>
