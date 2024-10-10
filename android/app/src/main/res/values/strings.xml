@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">wishapp</string>
+    <string name="title_activity_main">wishapp</string>
+    <string name="package_name">com.wishapp</string>
+    <string name="custom_url_scheme">com.wishapp</string>
+</resources>
