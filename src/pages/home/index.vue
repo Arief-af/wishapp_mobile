@@ -5,11 +5,11 @@
         class="relative bg-primary rounded-lg p-5 min-h-[200px] flex justify-center items-center"
       >
         <section class="text-center">
-          <div class="text-dark">Your Balance</div>
+          <div class="text-dark">Hai, {{ data.username }}, Your Balance</div>
           <div class="font-bold text-2xl text-dark-cover">IDR 1,000,000</div>
         </section>
         <div
-          @click="$router.push('/login')"
+          @click="logout"
           class="bg-white right-6 top-6 w-12 h-12 rounded-full absolute flex justify-center items-center"
         >
           <box-icon class="fill-primary" name="exit"></box-icon>
@@ -52,6 +52,16 @@
 
 <script setup>
 import AppLayout from "@/layouts/App.vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const data = ref(JSON.parse(localStorage.getItem("profile")));
+console.log(data.value);
+const router = useRouter();
+const logout = () => {
+  localStorage.removeItem("data");
+  router.push("/login");
+}
 </script>
 
 <style lang="scss" scoped></style>

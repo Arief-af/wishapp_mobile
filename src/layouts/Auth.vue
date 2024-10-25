@@ -1,4 +1,6 @@
 <script setup>
+
+import { onMounted, ref } from 'vue';
 const props = defineProps({
     title: {
         type: String,
@@ -7,6 +9,12 @@ const props = defineProps({
     backPath: {
         type: String
     }
+})
+
+const transition = ref(false)
+
+onMounted(() => {
+    transition.value = true
 })
 </script>
 
@@ -17,7 +25,24 @@ const props = defineProps({
         </header>
         <div class="h-[calc(100vh-84px)] px-[25px] overflow-auto">
             <h1 class="text-primary text-lg font-bold">{{ props.title }}</h1>
-            <slot />
+            <Transition>
+                <section v-if="transition">
+                    <slot />
+                </section>
+            </Transition>
         </div>
     </main>
 </template>
+
+<style scoped>
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

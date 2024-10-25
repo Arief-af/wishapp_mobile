@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Hide footer when any input field is focused */
+.input:focus ~ .footer {
+    display: none !important; /* Hides the footer */
+}
+
+/* Optional: Add some transition for a smoother effect */
+.footer {
+    transition: opacity 0.3s ease; /* Optional transition */
+}
