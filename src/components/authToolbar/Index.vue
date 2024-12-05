@@ -8,7 +8,7 @@
             <div class="mb-12 font-light">
                 Atur Keuangan, Raih Impian
             </div>
-            <button @click="$router.push('/login')" class="btn bg-primary border-0 hover:bg-primary block w-full">Login</button>
+            <button @click="$router.push('/login')" class="btn text-dark bg-primary border-0 hover:bg-primary block w-full">Login</button>
         </div>
     </section>
     <!-- <footer class="h-[263px] w-full bg-primary rounded-t-[57px] p-8">
