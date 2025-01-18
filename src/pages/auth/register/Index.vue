@@ -9,8 +9,13 @@ import { useAuthStore } from '../../../stores/authStore';
 const authStore = useAuthStore();
 const errors = ref({})
 import { useNotificationStore } from "@/stores/notification";
+import { useLoading } from 'vue-loading-overlay'
 const notificationStore = useNotificationStore();
+
+const $loading = useLoading();
 const onSubmit = async () => {
+    const loading = $loading.show({
+    })
     try {
         const resp = await authStore.register(data.value);
         notificationStore.showNotification(resp?.data?.message, "success");
@@ -18,6 +23,8 @@ const onSubmit = async () => {
     } catch (error) {
         errors.value = error.response.data.errors
         notificationStore.showNotification(error.response.data.message, "error");
+    } finally {
+        loading.hide();
     }
 }
 </script>

@@ -41,6 +41,23 @@
     </div>
 
     <div
+      @click="$router.push('/history')"
+      :class="
+        $router.currentRoute.value.path == '/history' ? 'bg-primary' : 'bg-dark'
+      "
+      class="w-16 h-16 flex justify-center items-center text-sm rounded-full shadow text-primary"
+    >
+      <box-icon
+        :class="
+          $router.currentRoute.value.path == '/history'
+            ? 'fill-dark'
+            : 'fill-primary'
+        "
+        name="history"
+      ></box-icon>
+    </div>
+
+    <div
       @click="$router.push('/income')"
       :class="
         $router.currentRoute.value.path == '/income' ? 'bg-primary' : 'bg-dark'
