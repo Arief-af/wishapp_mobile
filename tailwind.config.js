@@ -1,3 +1,5 @@
+import daisyui from 'daisyui';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -10,7 +12,7 @@ export default {
       backgroundColor: {
         'dark': '#202020',
         'dark-cover': "#0C0C0C",
-        'primary': '#21BF73'
+        'primary': '#21BF73',
       },
       textColor: {
         'primary': '#21BF73',
@@ -21,11 +23,11 @@ export default {
         'primary': '#21BF73',
         'dark': '#202020',
         'dark-cover': "#0C0C0C",
-      }
+      },
     },
   },
-  plugins: [require('daisyui'),],
+  plugins: [daisyui], // Import DaisyUI here
   daisyui: {
-    themes:["light","dark"],
+    themes: ["light", "dark"],
   },
-}
+};

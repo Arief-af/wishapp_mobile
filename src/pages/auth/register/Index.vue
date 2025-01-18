@@ -4,8 +4,21 @@ import { useRouter } from 'vue-router'
 import AuthLayout from '@/layouts/Auth.vue'
 let data = ref({})
 const router = useRouter()
+
+import { useAuthStore } from '../../../stores/authStore';
+const authStore = useAuthStore();
 const errors = ref({})
-const onSubmit = () => {
+import { useNotificationStore } from "@/stores/notification";
+const notificationStore = useNotificationStore();
+const onSubmit = async () => {
+    try {
+        const resp = await authStore.register(data.value);
+        notificationStore.showNotification(resp?.data?.message, "success");
+        router.push('/login');
+    } catch (error) {
+        errors.value = error.response.data.errors
+        notificationStore.showNotification(error.response.data.message, "error");
+    }
 }
 </script>
 
@@ -20,9 +33,9 @@ const onSubmit = () => {
                 <template #label>Email*</template>
                 <template v-if="errors.email" #error>{{ errors.email[0] }}</template>
             </FormInput>
-            <FormInput v-model="data.phone_number" type="text" placeholder="Masukan nomor telp anda" class="my-5">
-                <template #label>No Telp*</template>
-                <template v-if="errors.phone_number" #error>{{ errors.phone_number[0] }}</template>
+            <FormInput v-model="data.username" type="text" placeholder="Masukan username anda" class="my-5">
+                <template #label>Username*</template>
+                <template v-if="errors.username" #error>{{ errors.username[0] }}</template>
             </FormInput>
             <FormInput v-model="data.password" type="password" placeholder="Masukan password anda" class="mt-5">
                 <template #label>Password*</template>

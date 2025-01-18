@@ -6,10 +6,10 @@
       >
         <section class="text-center">
           <div class="text-dark">Your Balance</div>
-          <div class="font-bold text-2xl text-dark-cover">IDR 1,000,000</div>
+          <div class="font-bold text-2xl text-dark-cover">{{ currencyFormat(balance.nominal) }}</div>
         </section>
         <div
-          @click="$router.push('/login')"
+          @click="logout"
           class="bg-white right-6 top-6 w-12 h-12 rounded-full absolute flex justify-center items-center"
         >
           <box-icon class="fill-primary" name="exit"></box-icon>
@@ -17,7 +17,7 @@
       </div>
     </section>
 
-    <section class="mt-5 flex justify-center items-center gap-5">
+    <!-- <section class="mt-5 flex justify-center items-center gap-5">
       <div
         class="text-white rounded-xl bg-dark w-28 h-28 justify-center p-4 flex items-center"
       >
@@ -38,22 +38,42 @@
           <div class="text-white text-sm">Spend</div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <dialog id="my_modal_1" ref="addDataModal" class="modal">
       <div class="modal-box">
         <h3 class="text-lg font-bold">Add New Wish!</h3>
         <form @submit.prevent="onSubmit">
           <FormInput
-            v-model="data.name"
+            v-model="data.title"
             type="text"
             placeholder="Masukan wish anda"
             class="my-5"
           >
             <template #label>Name*</template>
           </FormInput>
+        
           <FormInput
-            v-model="data.nominal"
+            v-model="data.start_date"
+            type="date"
+            placeholder="Kapan anda mulai menabung?"
+            class="my-5"
+          >
+            <template #label>Start date*</template>
+          </FormInput>
+
+          <FormInput
+            v-model="data.target_date"
+            type="date"
+            placeholder="Kapan target terkumpul"
+            class="my-5"
+          >
+            <template #label>Target date*</template>
+          </FormInput>
+
+
+          <FormInput
+            v-model="data.nominal_target"
             type="number"
             placeholder="Masukan nominal anda"
             class="my-5"
@@ -78,7 +98,7 @@
         <h3 class="text-lg font-bold">Edit Wish!</h3>
         <form @submit.prevent="onUpdate">
           <FormInput
-            v-model="data.name"
+            v-model="data.title"
             type="text"
             placeholder="Masukan wish anda"
             class="my-5"
@@ -86,13 +106,32 @@
             <template #label>Name*</template>
           </FormInput>
           <FormInput
-            v-model="data.nominal"
+            v-model="data.nominal_target"
             type="number"
             placeholder="Masukan nominal anda"
             class="my-5"
           >
             <template #label>nominal*</template>
           </FormInput>
+
+          <FormInput
+            v-model="data.start_date"
+            type="date"
+            placeholder="Kapan anda mulai menabung?"
+            class="my-5"
+          >
+            <template #label>Start date*</template>
+          </FormInput>
+
+          <FormInput
+            v-model="data.target_date"
+            type="date"
+            placeholder="Kapan target terkumpul"
+            class="my-5"
+          >
+            <template #label>Target date*</template>
+          </FormInput>
+
           <div class="flex justify-end w-full">
             <button class="btn bg-primary text-dark hover:bg-primary hover:text-dark">Submit</button>
           </div>
@@ -118,16 +157,17 @@
       </div>
       <div
         v-for="item in wishes"
-        class="relative text-white flex justify-between bg-dark p-8 rounded-lg w-full mb-3"
+        @click="$router.push(`/wish/detail/${item.id}`)"
+        class="relative cursor-pointer text-white flex justify-between bg-dark p-8 rounded-lg w-full mb-3"
       >
         <div>
-          <div class="text-primary">{{ item.name }}</div>
-          <div class="text-white">{{ item.nominal }}</div>
+          <div class="text-primary">{{  CapitalizeFirstLetter(item.title) }} </div>
+          <div class="text-white">{{ currencyFormat(item.nominal_target) }}</div>
         </div>
         <div class="flex gap-2 flex-col">
-          <div @click="onEdit(item.id)" class="btn btn-error">Show</div>
+          <div @click.stop="onEdit(item.id)" class="btn btn-error">Edit</div>
           <div
-            @click="onDelete(item.id)"
+            @click.stop="onDelete(item.id)"
             class="btn bg-primary text-dark hover:bg-primary hover:text-dark"
           >
             delete
@@ -142,20 +182,35 @@
 import AppLayout from "@/layouts/App.vue";
 import { ref } from "vue";
 import axios from "axios";
+import { useWishStore } from "../../stores/wishStore";
+import { useBalanceStore } from "../../stores/balanceStore";
+import { useNotificationStore } from "../../stores/notification";
+import { useAuthStore } from "../../stores/authStore";
 
+const authStore = useAuthStore();
+
+const logout = () => {
+  authStore.clearState();
+}
+
+const notificationStore = useNotificationStore();
+const wishStore = useWishStore();
 let data = ref({});
 let wishes = ref([]);
 let addDataModal = ref(null);
 let editDataModal = ref(null);
 let ID_FOR_UPDATE = ref(null);
 
+let balance = ref([]);
+
 // Fetch initial list of wishes
 const fetchWishes = async () => {
   try {
-    const resp = await axios.get("/wishes");
-    console.log(wishes.value);
-    
-    wishes.value = resp.data;
+    const resp = await wishStore.get();
+    wishes.value = resp.data.wishes;
+    const respHistory = await useAuthStore().history();
+    const respBalance = await useBalanceStore().get();
+    balance.value = respBalance.data;
   } catch (error) {
     console.error("Failed to fetch wishes:", error);
   }
@@ -171,11 +226,12 @@ const onEdit = (id) => {
 // Submit new wish
 const onSubmit = async () => {
   try {
-    const resp = await axios.post("/wishes", data.value);
-    wishes.value.push(resp.data.data);
+    const resp = await wishStore.post(data.value);
+    wishes.value.push(resp.data.wish) 
     addDataModal.value.close();
-    data.value = {};
+    notificationStore.showNotification(resp?.data?.message, "success");
   } catch (error) {
+    notificationStore.showNotification(error.response.data.message, "error");
     console.error("Failed to add wish:", error);
   }
 };
@@ -183,31 +239,47 @@ const onSubmit = async () => {
 // Update existing wish
 const onUpdate = async () => {
   try {
-    const resp = await axios.put(`/wishes/${ID_FOR_UPDATE.value}`, data.value);
+    const resp = await wishStore.put(ID_FOR_UPDATE.value, data.value);
+    console.log(resp.data.wish);
     const updatedWishIndex = wishes.value.findIndex(
       (item) => item.id === ID_FOR_UPDATE.value
     );
     if (updatedWishIndex !== -1) {
-      console.log(resp.data.data);
-      
-      wishes.value[updatedWishIndex] = resp.data.data;
+      wishes.value[updatedWishIndex] = resp.data.wish;
     }
     editDataModal.value.close();
-    data.value = {}; // Reset form
+    data.value = {}; 
+    notificationStore.showNotification(resp?.data?.message, "success");
   } catch (error) {
     console.error("Failed to update wish:", error);
+    notificationStore.showNotification(error.response.data.message, "error");
   }
 };
 
 // Delete a wish
 const onDelete = async (id) => {
   try {
-    await axios.delete(`/wishes/${id}`);
+    await wishStore.delete(id);
     wishes.value = wishes.value.filter((item) => item.id !== id);
+    notificationStore.showNotification(resp?.data?.message, "success");
   } catch (error) {
+    notificationStore.showNotification(error.response.data.message, "error");
     console.error("Failed to delete wish:", error);
   }
 };
+
+const currencyFormat = (value) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(value);
+};
+
+const CapitalizeFirstLetter = (string) => {
+  if (!string) return "";
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 
 // Fetch wishes on component mount
 fetchWishes();

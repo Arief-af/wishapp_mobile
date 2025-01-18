@@ -8,6 +8,8 @@
         :type="type"
         :placeholder="placeholder"
         :value="modelValue"
+        :required="required"
+        :readonly="props.readonly"
         @input="$emit('update:modelValue', $event.target.value)"
         class="bg-dark input w-full mt-3"
       />
@@ -32,6 +34,14 @@
     modelValue: {
       type: String,
       default: ''
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    required: {
+      type: Boolean,
+      default: true
     }
   });
   
