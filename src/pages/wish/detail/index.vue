@@ -180,6 +180,8 @@ import { useSavingStore } from "../../../stores/savingStore";
 import { useWithdrawStore } from "../../../stores/withdrawStore";
 import { useAuthStore } from "../../../stores/authStore";
 
+import { useNotificationStore } from "@/stores/notification";
+const notificationStore = useNotificationStore();
 const authStore = useAuthStore();
 const logout = () => {
   authStore.clearState();
@@ -221,8 +223,10 @@ const onSubmit = async () => {
     const resp = await useSavingStore().post(id, data.value);
     addDataModal.value.close();
     data.value = {};
+    notificationStore.showNotification("Saving Added", "success");
     await fetchWish();
   } catch (error) {
+    notificationStore.showNotification(error.response.data.message, "error");
     console.error("Failed to add wish:", error);
   }
 };
@@ -231,9 +235,11 @@ const onWithdraw = async () => {
   try {
     const resp = await useWithdrawStore().post(id, withdrawData.value);
     editDataModal.value.close();
+    notificationStore.showNotification("Withdraw Added", "success");
     withdrawData.value = {};
     await fetchWish();
   } catch (error) {
+    notificationStore.showNotification(error.response.data.message, "error");
     console.error("Failed to add withdraw:", error);
   }
 };
