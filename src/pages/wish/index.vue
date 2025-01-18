@@ -6,7 +6,10 @@
       >
         <section class="text-center">
           <div class="text-dark">Your Balance</div>
-          <div class="font-bold text-2xl text-dark-cover">{{ currencyFormat(balance.nominal) }}</div>
+          <div v-if="balanceUSD" class="font-bold text-2xl text-dark-cover">USD {{ balanceUSD }}</div>
+          <div v-else class="font-bold text-2xl text-dark-cover">{{ currencyFormat(balance.nominal) }}</div>
+          <button v-if="balanceUSD" @click="balanceUSD = null" class="mt-5 btn btn-sm">Change To IDR</button>
+          <button v-else @click="fetchConversionRate" class="mt-5 btn btn-sm">Change To USD</button>
         </section>
         <div
           @click="logout"
@@ -279,6 +282,27 @@ const currencyFormat = (value) => {
     style: "currency",
     currency: "IDR",
   }).format(value);
+};
+
+const currencies = ["USD", "IDR", "EUR", "JPY", "GBP"]; // Add more as needed
+
+const balanceUSD = ref(null)
+const fetchConversionRate = async () => {
+ 
+  try {
+    const API_KEY = "ec6bdb02ecf33344690228e5"; // Replace with your actual API key
+    const response = await axios.get(
+      `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/IDR/USD/${balance.value.nominal}`
+    ); 
+
+    // Check if the result exists and is a valid number
+    if (response.data && typeof response.data.conversion_result === "number") {
+      balanceUSD.value = response.data.conversion_result.toFixed(2);
+    } else {
+    }
+  } catch (error) {
+    console.error("Error fetching exchange rate:", error);
+  }
 };
 
 const CapitalizeFirstLetter = (string) => {

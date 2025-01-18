@@ -8,6 +8,7 @@ import detailWish from "@/pages/wish/detail/index.vue";
 import history from "@/pages/wish/history/index.vue";
 import income from "@/pages/income/index.vue";
 import profile from "@/pages/auth/profile/Index.vue";
+import report from "@/pages/report/index.vue";
 import { useAuthStore } from "../stores/authStore";
 
 const routes = [
@@ -55,6 +56,12 @@ const routes = [
     name: "profile",
     component: profile,
     meta: { requiresAuth: true },  // Protect this route
+  },
+  {
+    path: "/report",
+    name: "report",
+    component: report,
+    meta: { requiresAuth: false },  // Protect this route
   },
 ];
 

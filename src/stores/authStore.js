@@ -98,6 +98,15 @@ export const useAuthStore = defineStore({
         throw error;
       }
     },
+
+    async update (data){
+      try {
+        const resp = await axios.put("/api/user/update", data);
+        return resp;
+      } catch (error) {
+        throw error;
+      }
+    },
     clearState() {
       this.token = null;
       axios.defaults.headers.common["Authorization"] = null;

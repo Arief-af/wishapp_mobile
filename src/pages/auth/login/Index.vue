@@ -55,7 +55,10 @@ const onSubmit = async () => {
           />
           <span class="label-text text-white">Remember me</span>
         </label>
-       
+        <router-link to="/report" class="label-text text-white"
+          >Lupa password?
+          <span class="text-primary font-bold">Klik disini</span></router-link
+        >
       </div>
       <button
         type="submit"
