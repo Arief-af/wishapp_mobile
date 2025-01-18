@@ -25,6 +25,7 @@ export const useAuthStore = defineStore({
         this.token = resp.data.access_token;
         axios.defaults.headers.common["Authorization"] = "Bearer " + this.token;
         this.user = resp.data.user;
+        this.isLoggedIn = true;
         await this.createBalance();
         return resp;
       } catch (error) {
