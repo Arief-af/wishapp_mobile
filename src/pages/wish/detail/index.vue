@@ -179,6 +179,7 @@ import { capitalize } from "vue";
 import { useSavingStore } from "../../../stores/savingStore";
 import { useWithdrawStore } from "../../../stores/withdrawStore";
 import { useAuthStore } from "../../../stores/authStore";
+import { useLoading } from "vue-loading-overlay";
 
 const authStore = useAuthStore();
 const logout = () => {
@@ -216,7 +217,11 @@ const fetchWish = async () => {
   }
 };
 
+const $loading = useLoading();
 const onSubmit = async () => {
+  const loading = $loading.show({
+    
+  })
   try {
     const resp = await useSavingStore().post(id, data.value);
     addDataModal.value.close();
@@ -224,10 +229,15 @@ const onSubmit = async () => {
     await fetchWish();
   } catch (error) {
     console.error("Failed to add wish:", error);
+  } finally {
+    loading.hide();
   }
 };
 
 const onWithdraw = async () => {
+  const loading = $loading.show({
+    
+  })
   try {
     const resp = await useWithdrawStore().post(id, withdrawData.value);
     editDataModal.value.close();
@@ -235,6 +245,8 @@ const onWithdraw = async () => {
     await fetchWish();
   } catch (error) {
     console.error("Failed to add withdraw:", error);
+  } finally {
+    loading.hide();
   }
 };
 

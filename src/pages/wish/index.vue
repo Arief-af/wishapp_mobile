@@ -186,6 +186,7 @@ import { useWishStore } from "../../stores/wishStore";
 import { useBalanceStore } from "../../stores/balanceStore";
 import { useNotificationStore } from "../../stores/notification";
 import { useAuthStore } from "../../stores/authStore";
+import { useLoading } from "vue-loading-overlay";
 
 const authStore = useAuthStore();
 
@@ -224,7 +225,10 @@ const onEdit = (id) => {
 };
 
 // Submit new wish
+const $loading = useLoading();
 const onSubmit = async () => {
+  const loading = $loading.show({
+  })
   try {
     const resp = await wishStore.post(data.value);
     wishes.value.push(resp.data.wish) 
@@ -233,6 +237,8 @@ const onSubmit = async () => {
   } catch (error) {
     notificationStore.showNotification(error.response.data.message, "error");
     console.error("Failed to add wish:", error);
+  } finally {
+    loading.hide();
   }
 };
 

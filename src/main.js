@@ -6,10 +6,12 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 import 'boxicons'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-
+import {LoadingPlugin} from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App);
+app.use(LoadingPlugin);
 app.use(pinia)
 app.use(router);
 import FormInput from "./components/form/Input.vue";

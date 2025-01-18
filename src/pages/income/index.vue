@@ -73,6 +73,7 @@
   import { useNotificationStore } from "@/stores/notification";
   import { useAuthStore } from "@/stores/authStore";
   import { useBalanceStore } from "@/stores/balanceStore";
+import { useLoading } from "vue-loading-overlay";
 
   
   const notificationStore = useNotificationStore();
@@ -106,7 +107,10 @@
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
   
+  const $loading = useLoading();
   const onSubmit = async () => {
+    const loading = $loading.show({
+    })
     try {
       const resp = await useAuthStore().income(data.value);
       const respBalance = await useBalanceStore().get();
@@ -116,6 +120,8 @@
       addDataModal.value.close();
     } catch (error) {
         
+    }finally{
+        loading.hide();
     }
   }
   // Fetch wishes on component mount

@@ -2,21 +2,25 @@
 import { ref } from "vue";
 import AuthLayout from "../../../layouts/Auth.vue";
 const data = ref({});
-
+import { useLoading } from "vue-loading-overlay";
 import { useAuthStore } from "../../../stores/authStore";
 import { useRouter } from "vue-router";
 const authStore = useAuthStore();
 const router = useRouter();
 import { useNotificationStore } from "@/stores/notification";
 const notificationStore = useNotificationStore();
-
+const $loading = useLoading();
 const onSubmit = async () => {
+  const loading = $loading.show({
+  })
   try {
     const resp = await authStore.login(data.value);
     notificationStore.showNotification(resp?.data?.message, "success");
     router.push("/home");
   } catch (error) {
     notificationStore.showNotification(error.response.data.message, "error");
+  } finally {
+    loading.hide();
   }
 };
 </script>
