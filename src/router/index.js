@@ -7,7 +7,7 @@ import HomePage from "@/pages/wish/index.vue";
 import detailWish from "@/pages/wish/detail/index.vue";
 import history from "@/pages/wish/history/index.vue";
 import income from "@/pages/income/index.vue";
-import profilePage from "@/pages/auth/profile/Index.vue";
+import profile from "@/pages/auth/profile/Index.vue";
 import { useAuthStore } from "../stores/authStore";
 
 const routes = [
@@ -30,27 +30,32 @@ const routes = [
     path: "/home",
     name: "home",
     component: HomePage,
+    meta: { requiresAuth: true },  // Protect this route
   },
   {
     path: "/wish/detail/:id",
     name: "detailWish",
     component: detailWish,
+    meta: { requiresAuth: true },  // Protect this route
   },
   {
     path: "/history",
     name: "hisory",
     component: history,
+    meta: { requiresAuth: true },  // Protect this route
   },
   {
     path: "/income",
     name: "income",
     component: income,
+    meta: { requiresAuth: true },  // Protect this route
   },
   {
     path: "/profile",
     name: "profile",
-    component: profilePage,
-  }
+    component: profile,
+    meta: { requiresAuth: true },  // Protect this route
+  },
 ];
 
 const router = createRouter({
@@ -64,10 +69,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
-  // Cek jika pengguna sudah login
-  if (authStore.isLoggedIn) {
+  // Check if the route requires authentication
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+    // Redirect to the login page if not logged in
+    next({ name: "Login" });
+  } else {
+    // Proceed to the requested route
+    next();
   }
-
-  next();
 });
+
 export default router;
