@@ -51,9 +51,7 @@ const onSubmit = async () => {
           />
           <span class="label-text text-white">Remember me</span>
         </label>
-        <router-link to="/forgot-password" class="label-text text-primary"
-          >Forgot password?</router-link
-        >
+       
       </div>
       <button
         type="submit"
